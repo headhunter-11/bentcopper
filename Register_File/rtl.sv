@@ -6,11 +6,12 @@ module regfile(input  logic        clk,
 
   logic [31:0] rf[31:0];
 
-  // three-ported register file: write on rising edge, read combinationally
+  // x0 is hardwired to zero and must never be written.
   always_ff @(posedge clk)
-    if (we3) rf[a3] <= wd3;
+    if (we3 && (a3 != 5'd0))
+      rf[a3] <= wd3;
 
-  // register 0 is hardwired to 0
-  assign rd1 = (a1 != 5'b0) ? rf[a1] : 32'b0;
-  assign rd2 = (a2 != 5'b0) ? rf[a2] : 32'b0;
+  // Asynchronous reads; x0 always returns zero.
+  assign rd1 = (a1 == 5'd0) ? 32'b0 : rf[a1];
+  assign rd2 = (a2 == 5'd0) ? 32'b0 : rf[a2];
 endmodule
