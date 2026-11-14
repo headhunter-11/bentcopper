@@ -16,7 +16,7 @@ module datapath(input  logic        clk, reset,
   logic [31:0] Result;
 
   // PC update and PC-relative branch/jump target.
-  flopr #(32) pcreg(clk, reset, PCNext, PC);
+  flopr #(32) pcreg(.d(PCNext), .clk(clk), .reset(reset), .q(PC));
   adder       pcadd4(PC, 32'd4, PCPlus4);
   extend      ext(Instr[31:7], ImmSrc, ImmExt);
   assign ImmExtShifted = ImmExt << 1;
